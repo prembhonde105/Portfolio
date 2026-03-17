@@ -1,93 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Portfolio</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prem Bhonde — IT Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#080808;
+    --surface:#111;
+    --surface2:#181818;
+    --border:rgba(255,255,255,0.08);
+    --accent:#5b8fff;
+    --accent2:#a78bfa;
+    --gold:#f5c842;
+    --text:#f0f0f0;
+    --muted:#888;
+    --radius:18px;
+    --nav-h:64px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;font-size:16px}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
 
+  /* CUSTOM CURSOR */
+  #cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,width .2s,height .2s,background .2s}
+  #cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(91,143,255,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .15s ease,width .3s,height .3s,opacity .3s}
+  body:hover #cursor{opacity:1}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 40px;backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);background:rgba(8,8,8,0.72);border-bottom:1px solid var(--border);transition:background .4s}
+  .nav-logo{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-.02em;color:#fff;text-decoration:none}
+  .nav-logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:28px;list-style:none}
+  .nav-links a{font-size:.82rem;color:var(--muted);text-decoration:none;letter-spacing:.03em;transition:color .2s;font-weight:500}
+  .nav-links a:hover{color:#fff}
+  .nav-cta{background:var(--accent);color:#fff;border:none;padding:8px 20px;border-radius:50px;font-size:.82rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:none;transition:transform .2s,box-shadow .2s}
+  .nav-cta:hover{transform:scale(1.05);box-shadow:0 0 24px rgba(91,143,255,.5)}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:4px}
+  .hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+
+  /* HERO */
+  #hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:120px 24px 80px}
+  .hero-bg{position:absolute;inset:0;z-index:0}
+  .hero-orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.35;animation:float 8s ease-in-out infinite}
+  .orb1{width:600px;height:600px;background:radial-gradient(circle,#5b8fff,transparent);top:-100px;left:-150px;animation-delay:0s}
+  .orb2{width:500px;height:500px;background:radial-gradient(circle,#a78bfa,transparent);bottom:-100px;right:-100px;animation-delay:-3s}
+  .orb3{width:300px;height:300px;background:radial-gradient(circle,#f5c842,transparent);top:40%;left:55%;animation-delay:-5s;opacity:.18}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-30px) scale(1.05)}}
+  .noise{position:absolute;inset:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+  .hero-content{position:relative;z-index:1;max-width:860px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(91,143,255,.12);border:1px solid rgba(91,143,255,.25);border-radius:50px;padding:6px 16px;font-size:.78rem;color:var(--accent);margin-bottom:28px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+  .hero-badge .dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:800;line-height:1.0;letter-spacing:-.04em;margin-bottom:24px}
+  h1 .line{display:block;overflow:hidden}
+  h1 .word{display:inline-block;transform:translateY(110%);animation:slideUp .8s cubic-bezier(.22,1,.36,1) forwards}
+  h1 .w2{animation-delay:.1s}
+  h1 .w3{animation-delay:.2s}
+  h1 .highlight{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  @keyframes slideUp{to{transform:translateY(0)}}
+  .hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.7;opacity:0;animation:fadeIn .8s .5s forwards}
+  @keyframes fadeIn{to{opacity:1}}
+  .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeIn .8s .7s forwards}
+  .btn-primary{background:var(--accent);color:#fff;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:500;font-size:.95rem;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px}
+  .btn-primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 12px 40px rgba(91,143,255,.4)}
+  .btn-ghost{border:1px solid var(--border);color:var(--text);padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:500;font-size:.95rem;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05)}
+  .scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.4;animation:fadeIn 1s 1.2s both}
+  .scroll-hint span{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,transparent,var(--muted));animation:scrollAnim 2s ease-in-out infinite}
+  @keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* STATS BAND */
+  .stats-band{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:28px 40px;display:flex;justify-content:center;gap:60px;flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .stat-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+  /* ABOUT */
+  #about{padding:100px 40px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .about-visual{position:relative}
+  .avatar-wrap{width:280px;height:280px;border-radius:40px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;color:#fff;position:relative;overflow:hidden}
+  .avatar-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent)}
+  .avatar-ring{position:absolute;top:-20px;left:-20px;right:-20px;bottom:-20px;border:1px dashed rgba(91,143,255,.3);border-radius:55px;animation:spin 20s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .avatar-tag{position:absolute;bottom:-16px;right:-16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-size:.8rem;backdrop-filter:blur(10px)}
+  .avatar-tag strong{display:block;color:var(--gold);font-family:'Syne',sans-serif}
+  .about-text h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.03em;margin-bottom:20px}
+  .about-text p{color:var(--muted);line-height:1.8;margin-bottom:16px;font-size:.98rem}
+  .college-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:24px;display:flex;align-items:center;gap:16px}
+  .college-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+  .college-card p{margin:0;font-size:.85rem;color:var(--muted);line-height:1.5}
+  .college-card strong{color:var(--text);display:block;font-size:.9rem}
+  .skills-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .skill-tag{background:rgba(91,143,255,.1);border:1px solid rgba(91,143,255,.2);border-radius:50px;padding:6px 16px;font-size:.78rem;color:var(--accent);font-weight:500}
+
+  /* SECTION COMMON */
+  .work-section{padding:80px 40px;max-width:1200px;margin:0 auto}
+  .section-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .section-label::before{content:'';display:block;width:24px;height:1px;background:var(--accent)}
+  .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px}
+  .section-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+  .section-desc{color:var(--muted);max-width:420px;font-size:.9rem;line-height:1.7}
+
+  /* DIVIDER */
+  .section-divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:0 40px}
+
+  /* 10-DAY GRID */
+  .days-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+  .day-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;position:relative;overflow:hidden;cursor:none;transition:transform .3s,border-color .3s,box-shadow .3s;group}
+  .day-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(91,143,255,.06),transparent);opacity:0;transition:opacity .3s}
+  .day-card:hover{transform:translateY(-4px);border-color:rgba(91,143,255,.3);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .day-card:hover::before{opacity:1}
+  .day-num{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .day-badge{width:24px;height:24px;background:rgba(91,143,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent)}
+  .day-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:10px;color:#fff}
+  .day-card p{font-size:.84rem;color:var(--muted);line-height:1.65}
+  .day-upload{margin-top:20px;border:1.5px dashed rgba(91,143,255,.2);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s,background .2s}
+  .day-upload:hover{border-color:rgba(91,143,255,.5);background:rgba(91,143,255,.05)}
+  .day-upload label{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;font-size:.78rem;color:var(--muted)}
+  .day-upload label:hover{color:var(--accent)}
+  .day-upload svg{opacity:.5}
+  .day-upload input{display:none}
+  .upload-preview{display:none;width:100%;border-radius:8px;margin-top:8px;max-height:120px;object-fit:cover}
+  .day-tag{display:inline-block;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);border-radius:50px;padding:3px 10px;font-size:.7rem;color:var(--accent2);margin-top:12px}
+  .progress-bar{height:3px;background:var(--border);border-radius:2px;margin-top:16px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(to right,var(--accent),var(--accent2));border-radius:2px;width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+
+  /* CAD SECTION COLOR */
+  #cad .section-label{color:var(--accent2)}
+  #cad .section-label::before{background:var(--accent2)}
+  #cad .day-num{color:var(--accent2)}
+  #cad .day-badge{background:rgba(167,139,250,.15);color:var(--accent2)}
+  #cad .day-card:hover{border-color:rgba(167,139,250,.3)}
+  #cad .skill-tag{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.2);color:var(--accent2)}
+  #cad .btn-primary{background:var(--accent2)}
+
+  /* EXTRA SECTIONS */
+  #s3 .day-num,#s4 .day-num{color:var(--gold)}
+  #s3 .section-label,#s4 .section-label{color:var(--gold)}
+  #s3 .section-label::before,#s4 .section-label::before{background:var(--gold)}
+  #s3 .day-badge,#s4 .day-badge{background:rgba(245,200,66,.1);color:var(--gold)}
+
+  #s5 .day-num,#s6 .day-num{color:#34d399}
+  #s5 .section-label,#s6 .section-label{color:#34d399}
+  #s5 .section-label::before,#s6 .section-label::before{background:#34d399}
+  #s5 .day-badge,#s6 .day-badge{background:rgba(52,211,153,.1);color:#34d399}
+
+  #s7 .day-num,#s8 .day-num{color:#f87171}
+  #s7 .section-label,#s8 .section-label{color:#f87171}
+  #s7 .section-label::before,#s8 .section-label::before{background:#f87171}
+  #s7 .day-badge,#s8 .day-badge{background:rgba(248,113,113,.1);color:#f87171}
+
+  #s9 .day-num{color:#fb923c}
+  #s9 .section-label{color:#fb923c}
+  #s9 .section-label::before{background:#fb923c}
+  #s9 .day-badge{background:rgba(251,146,60,.1);color:#fb923c}
+
+  /* FEATURED HERO CARD */
+  .featured-card{grid-column:1/-1;background:linear-gradient(135deg,var(--surface) 0%,rgba(91,143,255,.06) 100%);border:1px solid rgba(91,143,255,.2);border-radius:24px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+  .featured-card::after{content:'FEATURED';position:absolute;top:20px;right:20px;font-size:.65rem;letter-spacing:.15em;font-weight:700;color:var(--accent);background:rgba(91,143,255,.1);border:1px solid rgba(91,143,255,.2);padding:4px 10px;border-radius:50px}
+  .featured-visual{background:var(--surface2);border-radius:16px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3rem;border:1px solid var(--border)}
+
+  /* CONTACT / FOOTER */
+  #contact{padding:100px 40px;text-align:center;position:relative;overflow:hidden}
+  .contact-orb{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(91,143,255,.12),transparent);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+  #contact h2{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;letter-spacing:-.04em;margin-bottom:20px;position:relative}
+  #contact p{color:var(--muted);font-size:1.05rem;margin-bottom:40px;position:relative}
+  .contact-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;position:relative}
+  .contact-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;text-decoration:none;font-weight:500;font-size:.9rem;border:1px solid var(--border);color:var(--text);background:var(--surface);transition:all .3s}
+  .contact-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(91,143,255,.08)}
+  footer{background:var(--surface);border-top:1px solid var(--border);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  .footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem}
+  .footer-logo span{color:var(--accent)}
+  footer p{font-size:.78rem;color:var(--muted)}
+  .footer-links{display:flex;gap:24px}
+  .footer-links a{font-size:.78rem;color:var(--muted);text-decoration:none;transition:color .2s}
+  .footer-links a:hover{color:#fff}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+  .reveal.visible{opacity:1;transform:none}
+  .reveal-delay-1{transition-delay:.1s}
+  .reveal-delay-2{transition-delay:.2s}
+  .reveal-delay-3{transition-delay:.3s}
+
+  /* TYPEWRITER */
+  .typewriter::after{content:'|';animation:blink .7s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* TIMELINE STRIP */
+  .timeline-strip{display:flex;gap:0;margin-bottom:40px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+  .tl-item{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;position:relative;padding:0 20px}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;top:14px;right:-1px;width:calc(100% - 28px);height:1px;background:var(--border)}
+  .tl-dot{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:var(--muted);position:relative;z-index:1;transition:.3s;cursor:pointer}
+  .tl-dot.active,.tl-dot:hover{border-color:var(--accent);background:rgba(91,143,255,.15);color:var(--accent)}
+  .tl-label{font-size:.65rem;color:var(--muted);margin-top:6px;white-space:nowrap}
+
+  /* MOBILE */
+  @media(max-width:768px){
+    nav{padding:0 20px}
+    .nav-links,.nav-cta{display:none}
+    .hamburger{display:flex}
+    #about{grid-template-columns:1fr;gap:40px;padding:60px 20px}
+    .avatar-wrap{width:200px;height:200px;font-size:3.5rem}
+    .work-section{padding:60px 20px}
+    .featured-card{grid-template-columns:1fr}
+    footer{flex-direction:column;text-align:center;padding:24px 20px}
+    .stats-band{gap:32px;padding:24px 20px}
+    #hero{padding:100px 20px 60px}
+    .section-header{flex-direction:column;align-items:flex-start}
+    .days-grid{grid-template-columns:1fr}
+    #contact{padding:60px 20px}
+  }
+</style>
+</head>
 <body>
 
-<header>
-<h2 class="logo">MyPortfolio</h2>
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-<nav>
-<a href="#home">Home</a>
-<a href="#about">About</a>
-<a href="#skills">Skills</a>
-<a href="#projects">Projects</a>
-<a href="#contact">Contact</a>
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">prem<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#webdev">Web Dev</a></li>
+    <li><a href="#cad">CAD</a></li>
+    <li><a href="#s3">Section 3</a></li>
+    <li><a href="#s4">Section 4</a></li>
+    <li><a href="#s5">Section 5</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Hire Me</button>
+  <button class="hamburger" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
-</header>
 
-<section id="home" class="home">
-<h1>Hello, I'm <span>Prem</span></h1>
-<p>A beginner Web Developer</p>
-<button onclick="showMessage()">more</button>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <div class="noise"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> First Year IT Engineering Student</div>
+    <h1>
+      <span class="line"><span class="word w1">Prem</span> <span class="word w2 highlight">Bhonde</span></span>
+      <span class="line"><span class="word w3" style="font-size:60%;opacity:.6;font-weight:400;letter-spacing:-.01em" id="typewriter"></span></span>
+    </h1>
+    <p class="hero-sub">Building at the intersection of <strong>code</strong> and <strong>design</strong> — one day at a time. IT Engineering student at SSGMCE, Shegaon.</p>
+    <div class="hero-actions">
+      <a href="#webdev" class="btn-primary">↓ Explore My Work</a>
+      <a href="#about" class="btn-ghost">About Me</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
 </section>
 
-<section id="about" class="about">
-<h2>About Me</h2>
-<p>
-I am a BTech Information Technology student learning
-HTML, CSS and JavaScript. I enjoy building websites
-and learning new technologies.
-</p>
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat"><div class="stat-num" data-count="9">0</div><div class="stat-label">Skill Sections</div></div>
+  <div class="stat"><div class="stat-num" data-count="90">0</div><div class="stat-label">Days Logged</div></div>
+  <div class="stat"><div class="stat-num" data-count="2">0</div><div class="stat-label">Core Domains</div></div>
+  <div class="stat"><div class="stat-num" data-count="1">0</div><div class="stat-label">Year in IT Eng.</div></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div style="position:relative;display:inline-block">
+      <div class="avatar-wrap">PB<div class="avatar-ring"></div></div>
+      <div class="avatar-tag"><strong>2024–25</strong>First Year · IT Dept.</div>
+    </div>
+  </div>
+  <div class="about-text reveal reveal-delay-1">
+    <div class="section-label">About Me</div>
+    <h2>Driven by curiosity.<br/>Powered by code.</h2>
+    <p>Hi! I'm <strong>Prem Bhonde</strong>, a passionate first-year Information Technology engineering student. I document everything I learn — every concept, every project, every "aha" moment — right here.</p>
+    <p>My goal is to become a well-rounded tech professional by mastering both the art of building for the web and engineering precision tools through CAD and beyond.</p>
+    <div class="college-card">
+      <div class="college-icon">🎓</div>
+      <div>
+        <strong>Shri Sant Gajanan Maharaj College of Engineering</strong>
+        <p>Shegaon, Maharashtra · Information Technology · Batch 2024–28</p>
+      </div>
+    </div>
+    <div class="skills-row">
+      <span class="skill-tag">HTML &amp; CSS</span>
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">CAD Tools</span>
+      <span class="skill-tag">Python Basics</span>
+      <span class="skill-tag">UI Design</span>
+      <span class="skill-tag">Linux</span>
+    </div>
+  </div>
 </section>
 
-<section id="skills" class="skills">
-<h2>My Skills</h2>
+<div class="section-divider"></div>
 
-<div class="skill-box">
-<div>HTML</div>
-<div>CSS</div>
-<div>JavaScript</div>
-<div>C Programming</div>
-</div>
+<!-- ═══════════ SECTION 1 — WEB DEVELOPMENT ═══════════ -->
+<section id="webdev" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 01</div>
+      <h2 class="section-title">Web<br/>Development</h2>
+    </div>
+    <p class="section-desc">10 days of building from scratch — HTML to CSS to interactive JavaScript. Each day a new concept, each card a milestone.</p>
+  </div>
 
+  <!-- Timeline -->
+  <div class="timeline-strip reveal">
+    <div class="tl-item"><div class="tl-dot active">1</div><div class="tl-label">HTML Basics</div></div>
+    <div class="tl-item"><div class="tl-dot">2</div><div class="tl-label">CSS Styling</div></div>
+    <div class="tl-item"><div class="tl-dot">3</div><div class="tl-label">Flexbox</div></div>
+    <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">Grid Layout</div></div>
+    <div class="tl-item"><div class="tl-dot">5</div><div class="tl-label">Responsive</div></div>
+    <div class="tl-item"><div class="tl-dot">6</div><div class="tl-label">JavaScript</div></div>
+    <div class="tl-item"><div class="tl-dot">7</div><div class="tl-label">DOM Events</div></div>
+    <div class="tl-item"><div class="tl-dot">8</div><div class="tl-label">Forms</div></div>
+    <div class="tl-item"><div class="tl-dot">9</div><div class="tl-label">APIs</div></div>
+    <div class="tl-item"><div class="tl-dot">10</div><div class="tl-label">Final Project</div></div>
+  </div>
+
+  <div class="days-grid">
+    <!-- Featured -->
+    <div class="featured-card reveal">
+      <div>
+        <div class="day-num"><div class="day-badge">01</div> Day 1 · Foundation</div>
+        <h3>HTML Structure & Semantic Markup</h3>
+        <p>Learned the skeleton of the web. Built my first webpage using proper semantic HTML5 tags — header, main, article, footer. Understood the DOM tree concept and accessibility basics.</p>
+        <div class="day-tag">HTML5</div>
+        <div class="day-upload" style="margin-top:16px">
+          <label><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V8m0 0-3 3m3-3 3 3M20 16.5A3.5 3.5 0 0 1 16.5 20h-9A3.5 3.5 0 0 1 4 16.5V15"/></svg>Upload your Day 1 screenshot / project<input type="file" accept="image/*" onchange="previewUpload(this)"/></label>
+          <img class="upload-preview"/>
+        </div>
+      </div>
+      <div class="featured-visual">🌐</div>
+    </div>
+
+    <div id="wd-cards"></div>
+  </div>
 </section>
 
-<section id="projects" class="projects">
-<h2>My Projects</h2>
+<div class="section-divider"></div>
 
-<div class="project-container">
-
-<div class="project-card">
-<h3>Portfolio Website</h3>
-<p>A personal portfolio website using HTML CSS JS</p>
-</div>
-
-<div class="project-card">
-<h3>Calculator</h3>
-<p>Simple calculator using JavaScript</p>
-</div>
-
-<div class="project-card">
-<h3>Student Form</h3>
-<p>Form validation using JavaScript</p>
-</div>
-
-</div>
+<!-- ═══════════ SECTION 2 — CAD ═══════════ -->
+<section id="cad" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 02</div>
+      <h2 class="section-title">Computer<br/>Aided Design</h2>
+    </div>
+    <p class="section-desc">Precision meets creativity. 10 days exploring the world of 2D drafting, 3D modelling, and engineering design thinking.</p>
+  </div>
+  <div class="timeline-strip reveal">
+    <div class="tl-item"><div class="tl-dot active" style="border-color:var(--accent2);background:rgba(167,139,250,.15);color:var(--accent2)">1</div><div class="tl-label">Intro to CAD</div></div>
+    <div class="tl-item"><div class="tl-dot">2</div><div class="tl-label">2D Sketching</div></div>
+    <div class="tl-item"><div class="tl-dot">3</div><div class="tl-label">Constraints</div></div>
+    <div class="tl-item"><div class="tl-dot">4</div><div class="tl-label">3D Features</div></div>
+    <div class="tl-item"><div class="tl-dot">5</div><div class="tl-label">Assembly</div></div>
+    <div class="tl-item"><div class="tl-dot">6</div><div class="tl-label">Drawings</div></div>
+    <div class="tl-item"><div class="tl-dot">7</div><div class="tl-label">Rendering</div></div>
+    <div class="tl-item"><div class="tl-dot">8</div><div class="tl-label">Simulation</div></div>
+    <div class="tl-item"><div class="tl-dot">9</div><div class="tl-label">Sheet Metal</div></div>
+    <div class="tl-item"><div class="tl-dot">10</div><div class="tl-label">Final Model</div></div>
+  </div>
+  <div class="days-grid" id="cad-cards"></div>
 </section>
 
-<section id="contact" class="contact">
-<h2>Contact Me</h2>
+<div class="section-divider"></div>
 
-<form>
-<input type="text" placeholder="Your Name" required>
-<input type="email" placeholder="Your Email" required>
-<textarea placeholder="Your Message"></textarea>
-<button type="submit">Send</button>
-</form>
-
+<!-- ═══════════ SECTIONS 3–9 (EDITABLE) ═══════════ -->
+<section id="s3" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 03</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s3-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s4" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 04</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s4-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s5" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 05</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s5-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s6" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 06</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s6-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s7" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 07</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s7-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s8" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 08</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s8-cards"></div>
+</section>
+<div class="section-divider"></div>
+<section id="s9" class="work-section">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-label">Section 09</div>
+      <h2 class="section-title" contenteditable="true" title="Click to edit">Your Section Title</h2>
+    </div>
+    <p class="section-desc" contenteditable="true">Add your section description here. Click to edit.</p>
+  </div>
+  <div class="days-grid" id="s9-cards"></div>
 </section>
 
+<!-- CONTACT -->
+<div class="section-divider"></div>
+<section id="contact">
+  <div class="contact-orb"></div>
+  <h2 class="reveal">Let's connect<br/><span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">& collaborate.</span></h2>
+  <p class="reveal reveal-delay-1">First year IT student. Always learning. Open to projects & collabs.</p>
+  <div class="contact-links reveal reveal-delay-2">
+    <a class="contact-btn" href="mailto:prembhonde@example.com">✉ Email Me</a>
+    <a class="contact-btn" href="#">💼 LinkedIn</a>
+    <a class="contact-btn" href="#">🐙 GitHub</a>
+    <a class="contact-btn" href="#">📸 Instagram</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-<p>© 2026 Prem | Portfolio Website</p>
+  <div class="footer-logo">prem<span>.</span>bhonde</div>
+  <p>© 2025 Prem Bhonde · SSGMCE Shegaon · IT Engineering</p>
+  <div class="footer-links">
+    <a href="#hero">Top</a>
+    <a href="#webdev">Web Dev</a>
+    <a href="#cad">CAD</a>
+    <a href="#contact">Contact</a>
+  </div>
 </footer>
 
-<script src="script.js"></script>
+<script>
+// ─── CURSOR ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+setInterval(()=>{rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px'},16);
+document.querySelectorAll('a,button,label,[contenteditable]').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='56px';ring.style.height='56px';ring.style.opacity='.6'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='1'});
+});
 
+// ─── TYPEWRITER ───
+const phrases=['Building Websites.','Designing in CAD.','Learning Every Day.','1st Year IT @ SSGMCE.'];
+let pi=0,ci=0,del=false,tw=document.getElementById('typewriter');
+function type(){
+  const p=phrases[pi];
+  if(!del){tw.textContent=p.slice(0,++ci);if(ci===p.length){del=true;setTimeout(type,1600);return}}
+  else{tw.textContent=p.slice(0,--ci);if(ci===0){del=false;pi=(pi+1)%phrases.length}}
+  setTimeout(type,del?40:90)
+}
+type();
+
+// ─── STATS COUNTER ───
+function animCount(el,end){let s=0;const t=setInterval(()=>{s+=Math.ceil(end/40);if(s>=end){el.textContent=end;clearInterval(t)}else el.textContent=s},30)}
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animCount(e.target,+e.target.dataset.count);io.unobserve(e.target)}})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+
+// ─── REVEAL ON SCROLL ───
+const revIO=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>revIO.observe(el));
+
+// ─── PROGRESS BARS ───
+const pbIO=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const f=e.target.querySelector('.progress-fill');if(f)f.style.width=f.dataset.w;pbIO.unobserve(e.target)}})},{threshold:.3});
+
+// ─── GENERATE DAY CARDS ───
+const webData=[
+  {day:2,title:'CSS Styling & Selectors',desc:'Explored the cascade — colors, fonts, margins, paddings, and how specificity works. Styled my first page beautifully.',tag:'CSS3',emoji:'🎨',progress:60},
+  {day:3,title:'Flexbox Layout',desc:'Mastered Flexbox. Built a navigation bar and a card row that actually stays aligned across screens.',tag:'Flexbox',emoji:'📐',progress:55},
+  {day:4,title:'CSS Grid',desc:'Grid made 2D layouts click for me. Created a responsive photo gallery and a blog-style layout.',tag:'Grid',emoji:'🔲',progress:70},
+  {day:5,title:'Responsive Design',desc:'Media queries and mobile-first thinking. Made everything look great on phone, tablet, and desktop.',tag:'Responsive',emoji:'📱',progress:65},
+  {day:6,title:'JavaScript Fundamentals',desc:'Variables, loops, functions — the logic layer of the web. Wrote my first interactive script.',tag:'JavaScript',emoji:'⚡',progress:50},
+  {day:7,title:'DOM Manipulation',desc:'getElementById, querySelector, addEventListener. Made the page react to user actions in real time.',tag:'DOM',emoji:'🖱️',progress:58},
+  {day:8,title:'Forms & Validation',desc:'Built contact forms with live validation. Understood the role of UX in form design.',tag:'Forms',emoji:'📝',progress:62},
+  {day:9,title:'Fetch API & JSON',desc:'Made my first API call! Fetched live data and rendered it dynamically in the DOM.',tag:'APIs',emoji:'🌐',progress:48},
+  {day:10,title:'Mini Project Day',desc:'Brought everything together — a personal portfolio page with animations, responsive layout, and a working contact form.',tag:'Project',emoji:'🚀',progress:100},
+];
+
+const cadData=[
+  {day:1,title:'Introduction to CAD',desc:'Explored what CAD is — from AutoCAD to Fusion 360. Understood coordinate systems and workspace setup.',tag:'Overview',emoji:'📐'},
+  {day:2,title:'2D Sketching',desc:'Drew geometric shapes with precise dimensions — lines, arcs, circles, polygons. The foundation of every model.',tag:'2D',emoji:'✏️'},
+  {day:3,title:'Constraints & Dimensions',desc:'Added geometric and dimensional constraints. Made sketches fully defined — no wiggle room.',tag:'Constraints',emoji:'🔒'},
+  {day:4,title:'3D Features: Extrude & Revolve',desc:'Turned my 2D sketches into solid 3D bodies using extrude, revolve, and cut operations.',tag:'3D',emoji:'🧊'},
+  {day:5,title:'Assembly Basics',desc:'Linked multiple parts together using mates and constraints. Built a simple hinge assembly.',tag:'Assembly',emoji:'🔩'},
+  {day:6,title:'Technical Drawings',desc:'Generated 2D engineering drawings from 3D models — front view, top view, isometric.',tag:'Drawings',emoji:'📄'},
+  {day:7,title:'Rendering & Appearance',desc:'Applied materials, textures, and lighting. Made models look photorealistic.',tag:'Render',emoji:'🎨'},
+  {day:8,title:'Motion Simulation',desc:'Simulated a mechanism in motion — understood joints, forces, and basic kinematics.',tag:'Simulation',emoji:'⚙️'},
+  {day:9,title:'Sheet Metal Design',desc:'Explored bends, flanges, and flat patterns — a totally different design paradigm.',tag:'Sheet Metal',emoji:'🪗'},
+  {day:10,title:'Final Model Project',desc:'Designed a complete product from scratch: a mechanical bracket with all drawings and assembly.',tag:'Project',emoji:'🏆'},
+];
+
+function makeDayCard(d,prefix,color){
+  color=color||'var(--accent)';
+  return `<div class="day-card reveal">
+    <div class="day-num"><div class="day-badge">${String(d.day).padStart(2,'0')}</div>Day ${d.day}</div>
+    <h3>${d.emoji} ${d.title}</h3>
+    <p>${d.desc}</p>
+    <span class="day-tag">${d.tag}</span>
+    ${d.progress!==undefined?`<div class="progress-bar"><div class="progress-fill" data-w="${d.progress}%" style="background:linear-gradient(to right,${color},var(--accent2))"></div></div>`:''}
+    <div class="day-upload">
+      <label>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V8m0 0-3 3m3-3 3 3M20 16.5A3.5 3.5 0 0 1 16.5 20h-9A3.5 3.5 0 0 1 4 16.5V15"/></svg>
+        Upload Day ${d.day} Work
+        <input type="file" accept="image/*,application/pdf" onchange="previewUpload(this)"/>
+      </label>
+      <img class="upload-preview"/>
+    </div>
+  </div>`;
+}
+
+function makeGenericCards(containerId,color){
+  const c=document.getElementById(containerId);
+  if(!c)return;
+  let h='';
+  for(let i=1;i<=10;i++){
+    h+=`<div class="day-card reveal">
+      <div class="day-num"><div class="day-badge" style="background:rgba(245,200,66,.1);color:${color}">${String(i).padStart(2,'0')}</div>Day ${i}</div>
+      <h3 contenteditable="true" style="outline:none;border-bottom:1px dashed rgba(255,255,255,.1);padding-bottom:4px;margin-bottom:8px">Click to add Day ${i} title</h3>
+      <p contenteditable="true" style="outline:none">Click here to write what you learned on Day ${i}...</p>
+      <div class="day-upload" style="margin-top:16px">
+        <label><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V8m0 0-3 3m3-3 3 3M20 16.5A3.5 3.5 0 0 1 16.5 20h-9A3.5 3.5 0 0 1 4 16.5V15"/></svg>Upload Day ${i} Work<input type="file" accept="image/*,application/pdf" onchange="previewUpload(this)"/></label>
+        <img class="upload-preview"/>
+      </div>
+    </div>`;
+  }
+  c.innerHTML=h;
+  c.querySelectorAll('.reveal').forEach(el=>revIO.observe(el));
+  c.querySelectorAll('.day-card').forEach(el=>pbIO.observe(el));
+}
+
+// Populate Web Dev
+const wdContainer=document.getElementById('wd-cards');
+wdContainer.style.display='contents';
+webData.forEach(d=>{const tmp=document.createElement('div');tmp.style.display='contents';tmp.innerHTML=makeDayCard(d,'wd','var(--accent)');wdContainer.appendChild(tmp)});
+document.querySelectorAll('#webdev .reveal').forEach(el=>revIO.observe(el));
+document.querySelectorAll('#webdev .day-card').forEach(el=>pbIO.observe(el));
+
+// Populate CAD
+const cadContainer=document.getElementById('cad-cards');
+cadContainer.innerHTML=cadData.map(d=>makeDayCard(d,'cad','var(--accent2)')).join('');
+document.querySelectorAll('#cad .reveal').forEach(el=>revIO.observe(el));
+document.querySelectorAll('#cad .day-card').forEach(el=>pbIO.observe(el));
+
+// Populate generic sections
+['s3','s4','s5','s6','s7','s8','s9'].forEach(id=>makeGenericCards(id+'-cards','var(--gold)'));
+
+// ─── UPLOAD PREVIEW ───
+function previewUpload(input){
+  const img=input.closest('.day-upload').querySelector('.upload-preview');
+  if(input.files&&input.files[0]){
+    const r=new FileReader();
+    r.onload=e=>{img.src=e.target.result;img.style.display='block'};
+    r.readAsDataURL(input.files[0]);
+  }
+}
+
+// ─── TIMELINE DOT CLICK ───
+document.querySelectorAll('.tl-dot').forEach((dot,i,arr)=>{
+  dot.addEventListener('click',()=>{
+    arr.forEach(d=>{d.classList.remove('active');d.style.borderColor='';d.style.background='';d.style.color=''});
+    dot.classList.add('active');
+  });
+});
+
+// ─── SCROLL PROGRESS INDICATOR ───
+const prog=document.createElement('div');
+prog.style.cssText='position:fixed;top:0;left:0;height:2px;background:linear-gradient(to right,var(--accent),var(--accent2));z-index:200;transition:width .1s';
+document.body.prepend(prog);
+window.addEventListener('scroll',()=>{
+  const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  prog.style.width=pct+'%';
+});
+
+// ─── CONTENTEDITABLE PLACEHOLDER CLEAR ───
+document.querySelectorAll('[contenteditable]').forEach(el=>{
+  const orig=el.textContent;
+  el.addEventListener('focus',()=>{if(el.textContent===orig)el.textContent=''});
+  el.addEventListener('blur',()=>{if(!el.textContent.trim())el.textContent=orig});
+});
+</script>
 </body>
 </html>
